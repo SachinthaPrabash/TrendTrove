@@ -21,25 +21,28 @@ const products = () => {
     return (
         <Layout>
             <Link href={'/products/new'}
-                className='bg-blue-700 text-white py-1 px-2 rounded-md'>Add New Product</Link>
+                className='btn-primary font-semibold p-4 '>Add New Product</Link>
 
             <table className='basic mt-4'>
                 <thead>
                     <tr>
-                        <td>Product Name</td>
-                        <td>Product Price</td>
-                        <td></td>
+                        <th>Product Name</th>
+                        <th>Product Price</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {products.map(product => (
                         <tr key={product._id}>
-                            <td>{product.title}</td>
+                            <th>{product.title}</th>
                             <td>Rs. {product.price}</td>
                             <td>
-                                <Link href={'/products/edit/' + product._id}><FaEdit className='mx-1 text-green-200' />Edit
+                                <Link href={'/products/edit/' + product._id}
+                                    className='border-blue-600'
+                                ><FaEdit className=' mx-1 text-black' />Edit
                                 </Link>
-                                <Link href={'/products/delete/' + product._id}><AiFillDelete className='mx-1 text-green-200 ' />Delete
+                                <Link href={'/products/delete/' + product._id}
+                                    className='border-red-600'><AiFillDelete className='mx-1 text-black  ' />Delete
                                 </Link>
                             </td>
                         </tr>

@@ -109,11 +109,11 @@ const Categories = ({ swal }) => {
 
     return (
         <Layout>
-            <div>Categories</div>
-            <label>{editedCategory ? "Edit Category" : "New Category "}</label>
+            <div className="mb-4 text-2xl uppercase font-bold justify-center flex"> Categories</div>
+            <label >{editedCategory ? "Edit Category" : "New Category "}</label>
 
             <form onSubmit={saveCategory} >
-                <div className="flex gap-1">
+                <div className="flex gap-1 mt-2">
                     <input
                         type="text"
                         placeholder="Category Name"
@@ -132,12 +132,12 @@ const Categories = ({ swal }) => {
                     </select>
 
                 </div>
-                <div className="mb-2">
-                    <label className="block" > Properties </label>
+                <div className="m-2">
+                    <label className="block font-bold " > Properties </label>
                     <button
                         onClick={addProperty}
                         type="button"
-                        className="btn-primary">Add Property</button>
+                        className="btn-default my-4">Add Property</button>
                 </div>
                 {properties.length > 0 && properties.map((propertie, idx) => (
                     <div key={idx} className="flex gap-1 mb-2">
@@ -169,7 +169,7 @@ const Categories = ({ swal }) => {
                             className="btn-primary">Cancel</button>
 
                     )}
-                    <button type="submit" className="btn-primary">
+                    <button type="submit" className="btn-primary my-3">
                         Save
                     </button>
                 </div>
@@ -178,9 +178,9 @@ const Categories = ({ swal }) => {
                 <table className="basic mt-2">
                     <thead>
                         <tr>
-                            <td>Category Name</td>
-                            <td>Parent Category</td>
-                            <td></td>
+                            <th>Category Name</th>
+                            <th>Parent Category</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

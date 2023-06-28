@@ -23,22 +23,35 @@ label {
     @apply bg-blue-900 text-white px-5 py-1 rounded-md
 }
 
+.btn-default {
+    @apply bg-green-500 text-white px-5 py-1 rounded-md font-semibold
+}
+
 .btn-red {
     @apply bg-red-800 text-white px-5 py-1 rounded-md
 }
 
-table.basic {
-    @apply w-full
+.btn-non {
+    @apply bg-white text-black px-5 py-1 rounded-md font-semibold
 }
 
-table.basic thead tr td {
+table.basic {
+    @apply w-full text-sm text-left text-gray-500
+}
+
+table.basic thead tr th {
     @apply bg-blue-100 uppercase text-sm
 }
 
-table.basic tr td {
-    @apply border border-blue-200 p-1
+table.basic tbody tr th,
+td {
+    @apply border-b border-blue-200 py-1
 }
 
 table.basic a {
-    @apply bg-blue-900 text-white text-sm py-1 px-3 rounded-md inline-flex items-center gap-1 mr-2
+    @apply bg-white text-black text-sm py-1 px-3 rounded-md inline-flex items-center gap-1 mr-2 my-2
+}
+
+table.basic a:hover {
+    @apply border
 }
