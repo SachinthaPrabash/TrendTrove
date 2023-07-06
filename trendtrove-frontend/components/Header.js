@@ -1,9 +1,13 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import { styled } from 'styled-components'
+import { CartContext } from './CartContext'
 
 
 const Header = () => {
+
+    const { cartProducts } = useContext(CartContext)
+
     return (
 
         <header className='bg-[#27374D]   '>
@@ -17,7 +21,7 @@ const Header = () => {
                     <Link href={'/products'}>All Products</Link>
                     <Link href={'/categories'}>Categories</Link>
                     <Link href={'/account'}>Account</Link>
-                    <Link href={'/cart'}>Cart (0)</Link>
+                    <Link href={'/cart'}>Cart ({cartProducts.length})</Link>
 
                 </nav>
 

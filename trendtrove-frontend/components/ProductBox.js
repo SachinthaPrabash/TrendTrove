@@ -1,8 +1,10 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import { BsCartPlusFill } from 'react-icons/bs'
+import { CartContext } from './CartContext'
 
 const ProductBox = ({ _id, title, description, price, images }) => {
+    const { addProduct } = useContext(CartContext)
     const uri = '/product/' + _id;
     return (
         <div className=' mb-5'>
@@ -16,8 +18,8 @@ const ProductBox = ({ _id, title, description, price, images }) => {
                 </div>
                 <div className="px-2">
                     <div className="flex justify-between mt-2">
-                        <p className='font-extrabold text-lg'>Rs.{price}.00</p>
-                        <button className='btn-cart'><BsCartPlusFill className='text-white text-sm block md:hidden' /><p className='hidden md:block'>Add to Cart</p> </button>
+                        <p className='font-extrabold text-lg flex justify-center items-center'>Rs.{price}.00</p>
+                        <button className='btn-cart'><BsCartPlusFill className='text-white text-sm block md:hidden' /><p className='hidden md:block' onClick={() => addProduct(_id)}>Add to Cart</p> </button>
                     </div>
                 </div>
             </div>

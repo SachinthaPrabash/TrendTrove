@@ -1,7 +1,16 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
+import { CartContext } from './CartContext'
+
 
 const Freatured = ({ product }) => {
+
+    const { addProduct } = useContext(CartContext)
+
+    const addFeaturedToCart = () => {
+        addProduct(product._id)
+    }
+
     return (
         <div className='bg-[#27374D] '>
             <div className="text-white p-10 m-auto  max-w-5xl ">
@@ -15,15 +24,15 @@ const Freatured = ({ product }) => {
                                 </h1>
                             </div>
                             <div className="">
-                                <desc className='text-sm md:text-lg'>
+                                <p className='text-sm md:text-lg'>
                                     {product.description}
-                                </desc>
+                                </p>
                             </div>
                             <div className="flex gap-5 pt-3 text-xs md:text-base" >
                                 <Link href={'/products/' + product._id}>
                                     <button className='btn-deafult '>Read more</button>
                                 </Link>
-                                <button className='btn-cart'>Add to cart</button>
+                                <button className='btn-cart' onClick={addFeaturedToCart}>Add to cart</button>
                             </div>
                         </div>
 
