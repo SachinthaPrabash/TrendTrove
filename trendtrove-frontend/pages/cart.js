@@ -2,19 +2,44 @@ import { CartContext } from '@/components/CartContext'
 import Header from '@/components/Header'
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router';
+import { OrderSuccess } from '@/components/OrderSuccess';
 
 const cart = () => {
-
-    const { cartProducts, addProduct, removeProduct } = useContext(CartContext);
+    const router = useRouter();
+    const { cartProducts, addProduct, removeProduct, cartClear } = useContext(CartContext);
     const [products, setProducts] = useState([])
+
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('')
+    const [city, setCity] = useState('')
+    const [postalCode, setPostalCode] = useState('')
+    const [streetAddress, setStreetAddress] = useState('')
+    const [country, setCountry] = useState('')
+
+
+
     useEffect(() => {
+
         if (cartProducts.length > 0) {
             axios.post('/api/cart', { ids: cartProducts })
                 .then(response => {
                     setProducts(response.data)
                 })
+        } else {
+            setProducts([])
         }
+
+
     }, [cartProducts])
+
+    useEffect(() => {
+        if (router.query.success) {
+            cartClear();
+        }
+    }, [])
+
 
     const addMoreProducts = idx => {
         addProduct(idx)
@@ -24,11 +49,50 @@ const cart = () => {
         removeProduct(idx)
     }
 
+    async function goToPayment() {
+        const response = await axios.post('/api/checkout', {
+            name,
+            email,
+            city,
+            postalCode,
+            streetAddress,
+            country,
+            cartProducts
+        })
+        if (response.data.url) {
+            window.location = response.data.url
+        }
+    }
+
     let total = 0;
     for (const productId of cartProducts) {
         const price = products.find(p => p._id === productId)?.price || 0;
         total += price;
     }
+
+
+    if (router.query.success) {
+        return <OrderSuccess />;
+    }
+
+
+
+    // if (typeof window !== 'undefined' && window.location.href.includes('success')) {
+    //     return (
+    //         <>
+    //             <Header />
+
+    //             <div className="my-5">
+    //                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-10 mx-10">
+    //                     <div className="col-span-2 bg-white p-10 rounded-xl">
+    //                         <div className='text-xl font-extrabold'>Thanks for Your Order</div>
+    //                         <div>We will email you when your order will be sent.</div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </>
+    //     )
+    // }
 
     return (
         <>
@@ -100,40 +164,66 @@ const cart = () => {
                         <div className="bg-white p-10 rounded-xl flex-row justify-center items-center ">
                             <h1 className='text-2xl font-extrabold tracking-wider text-center'>Order Information</h1>
 
-
                             <div className="mt-8">
-
                                 <div className="relative z-0 w-full mb-6 group">
-                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" "
+                                        name="name"
+                                        value={name}
+                                        onChange={e => setName(e.target.value)} />
                                     <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">Name</label>
                                 </div>
 
                                 <div className="relative z-0 w-full mb-6 group">
-                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" "
+                                        name="email"
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)} />
                                     <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">Email</label>
                                 </div>
+                                <div className="grid md:grid-cols-2 md:gap-4">
 
-                                <div className="relative z-0 w-full mb-6 group">
-                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                                    <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">City</label>
+                                    <div className="relative z-0 w-full mb-6 group">
+                                        <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" "
+                                            name="city"
+                                            value={city}
+                                            onChange={e => setCity(e.target.value)} />
+                                        <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">City</label>
+                                    </div>
+
+                                    <div className="relative z-0 w-full mb-6 group">
+                                        <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" "
+                                            name="postalCode"
+                                            value={postalCode}
+                                            onChange={e => setPostalCode(e.target.value)} />
+                                        <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">Postal Code</label>
+                                    </div>
                                 </div>
 
                                 <div className="relative z-0 w-full mb-6 group">
-                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                                    <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">Postal Code</label>
-                                </div>
-
-                                <div className="relative z-0 w-full mb-6 group">
-                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" "
+                                        name="streetAddress"
+                                        value={streetAddress}
+                                        onChange={e => setStreetAddress(e.target.value)} />
                                     <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">Street Address</label>
                                 </div>
 
                                 <div className="relative z-0 w-full mb-6 group">
-                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                                    <input type="text" className=" focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" "
+                                        name="country"
+                                        value={country}
+                                        onChange={e => setCountry(e.target.value)} />
                                     <label className="peer-focus:font-medium peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6  ">Country</label>
                                 </div>
                             </div>
-                            <button className='bg-[#27374D] text-white w-full py-2 rounded-xl mt-4 '>Continue to Payment </button>
+
+
+                            <button onClick={goToPayment} className='bg-[#27374D] text-white w-full py-2 rounded-xl mt-4 '>Continue to Payment </button>
+
+
                         </div>
                     )}
                 </div>

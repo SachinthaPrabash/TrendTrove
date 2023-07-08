@@ -28,15 +28,28 @@ export const CartContextProvider = ({ children }) => {
         setCartProducts(prev => {
             const position = prev.indexOf(productId);
             if (position != -1) {
-                return prev.filter((val, index) => index !== position);
+                const updateCart = prev.filter((val, index) => index !== position);
+
+                if (updateCart.length == 0) {
+                    setCartProducts([])
+                    localStorage.removeItem('cart')
+
+                }
+                return updateCart
             }
             return prev;
         })
+
+    }
+
+    const cartClear = () => {
+        setCartProducts([])
+        localStorage.removeItem('cart')
     }
 
 
     return (
-        <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct }}>
+        <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct, cartClear }}>
             {children}
         </CartContext.Provider>
     )
